@@ -11,7 +11,8 @@ public class Coordinate {
     }
 
     @Override
-    public boolean equals(Coordinate o) {
+    public boolean equals(Object object) {
+        Coordinate o = (Coordinate) object;
         if (this.x == o.x && this.y == o.y)
             return true;
         return false;

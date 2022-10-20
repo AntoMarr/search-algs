@@ -12,4 +12,10 @@ public class State {
     }
 
     private Queue<Move> moves = new LinkedList<>();
+    private HashSet<
+
+    @Override
+    public boolean equals(Object o) {
+        return false;
+    }
 }
