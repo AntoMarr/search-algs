@@ -8,4 +8,7 @@ public abstract class GameObject {
     public GameObject(Coordinate coordinate) {
         this.coordinate = coordinate;
     }
+
+    @Override
+    public abstract boolean equals(Object object);
 }

@@ -4,7 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
-import me.antoniomarroquin.objects.Coin;
+import me.antoniomarroquin.State.Move;
+import me.antoniomarroquin.algorithms.BreadthFirstSearch;
+import me.antoniomarroquin.objects.Wall;
 
 /**
  * Hello world!
@@ -14,7 +16,6 @@ public class App
 {
     public static void main( String[] args )
     {
-        System.out.println( "Hello World!" );
         try {
             new App().testGameBoard();
         } catch (FileNotFoundException e) {
@@ -28,14 +29,19 @@ public class App
 
         StringBuilder sb = new StringBuilder();
 
-        while (sc.hasNext()) {
-            sb.append(sc.next());
+        while (sc.hasNextLine()) {
+            sb.append(sc.nextLine() + "\n");
         }
 
-        GameBoard gb = new GameBoard(sb.toString());
+        Problem gb = new Problem(sb.toString());
 
-        for (Coin coin : gb.coins) {
-            System.out.println("x: " + coin.coordinate.getX() + "\ty: " + coin.coordinate.getY());
+        System.out.println("\n---WALLS---");
+        for (Wall wall : gb.walls) {
+            System.out.println("x: " + wall.coordinate.getX() + "\ty: " + wall.coordinate.getY());
+        }
+
+        if (new BreadthFirstSearch().search(gb).move == Move.VICTORY) {
+            System.out.println("VICTORY!");
         }
     }
 }

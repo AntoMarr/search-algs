@@ -1,8 +1,11 @@
 package me.antoniomarroquin.algorithms;
 
-public abstract class Search {
+import me.antoniomarroquin.Problem;
+import me.antoniomarroquin.State;
+
+public interface Search {
 
 
-    public abstract void search();
+    public State search(Problem problem);
 
 }

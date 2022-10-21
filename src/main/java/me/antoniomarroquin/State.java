@@ -5,9 +5,10 @@ import java.util.HashSet;
 import java.util.Stack;
 
 import me.antoniomarroquin.objects.Coin;
+import me.antoniomarroquin.objects.Wall;
 
 public class State {
-    enum Move {
+    public enum Move {
         UP,
         DOWN,
         LEFT,
@@ -16,22 +17,31 @@ public class State {
         VICTORY
     }
 
-    private HashSet<Coin> coins = new HashSet<>();
+    private HashSet<Coin> coins = new HashSet<Coin>();
 
-    private Move move;
+    public Move move;
     private State parent;
     private Coordinate coordinate;
+    private Problem problem;
+
+    public int depth;
 
     // should only be used for first state
-    public State(Coordinate coordinate, Coin[] coins) {
+    public State(Coordinate coordinate, Coin[] coins, Problem problem) {
         this.coordinate = coordinate;
         this.coins.addAll(Arrays.asList(coins));
+        this.problem = problem;
+
+        depth = 0;
     }
 
     // for every child state
-    public State(State parent, Move move) {
+    public State(State parent, Move move, Problem problem) {
         this.parent = parent;
         this.move = move;
+        this.problem = problem;
+
+        depth = parent.depth + 1;
         coordinate = parent.coordinate;
 
         for (Coin coin : parent.coins)
@@ -61,6 +71,46 @@ public class State {
         }
     }
 
+    public HashSet<State> getNextStates() {
+        HashSet<State> nextStates = new HashSet<State>();
+
+        if (isOnCoin()) {
+            nextStates.add(new State(this, Move.PICKUP, problem));
+            return nextStates;
+        }
+        if (!isOnWall(coordinate.getUp()))
+            nextStates.add(new State(this, Move.UP, problem));
+        else
+            System.out.println("WALL");
+        if (!isOnWall(coordinate.getDown()))
+            nextStates.add(new State(this, Move.DOWN, problem));
+        if (!isOnWall(coordinate.getLeft()))
+            nextStates.add(new State(this, Move.LEFT, problem));
+        if (!isOnWall(coordinate.getRight()))
+            nextStates.add(new State(this, Move.RIGHT, problem));
+        return nextStates;
+    }
+
+    public boolean isGoalState() {
+        for (Coin coin : coins)
+            if (coin.isPickedUp() == false)
+                return false;
+        return true;
+    }
+
+    public boolean isOnCoin() {
+        for (Coin coin : coins) {
+            if (coordinate.equals(coin.coordinate)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isOnWall(Coordinate coordinate) {
+        return problem.walls.contains(new Wall(coordinate));
+    }
+ 
     public Stack<Move> getFullSetOfMoves() {
         State p = parent;
         Stack<Move> moves = new Stack<>();
@@ -74,5 +124,26 @@ public class State {
         }
 
         return moves;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof State)) {
+            return false;
+        }
+
+        State o = (State) object;
+
+        if (this.coordinate.equals(o.coordinate)) {
+            for (Coin coin : coins) {
+                for (Coin c : o.coins) {
+                    if (!coin.equals(c))
+                        return false;
+                }
+            }
+            return true;
+        }
+        
+        return false;
     }
 }

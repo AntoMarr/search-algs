@@ -26,5 +26,18 @@ public class Coin extends GameObject {
     public boolean isPickedUp() {
         return pickedUp;
     }
+
+    @Override
+    public boolean equals(Object object) {
+        if (!(object instanceof Coin)) 
+            return false;
+        Coin o = (Coin) object;
+
+        if (coordinate.equals(o.coordinate) && this.isPickedUp() == o.isPickedUp()) {
+            return true;
+        }
+
+        return false;
+    }
     
 }
