@@ -11,6 +11,11 @@ public class Coin extends GameObject {
         this.pickedUp = false;
     }
 
+    public Coin(Coordinate coordinate, boolean pickedUp) {
+        super(coordinate);
+        this.pickedUp = pickedUp;
+    }
+
     public boolean pickUp() {
         if (pickedUp == true)
             return false;

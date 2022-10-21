@@ -25,4 +25,20 @@ public class Coordinate {
     public int getY() {
         return y;
     }
+
+    public void moveUp() {
+        y++;
+    }
+
+    public void moveDown() {
+        y--;
+    }
+
+    public void moveLeft() {
+        x--;
+    }
+
+    public void moveRight() {
+        x++;
+    }
 }
